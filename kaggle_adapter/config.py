@@ -138,11 +138,16 @@ def load_base_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
 
 
 def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
-    """Deep merge two dictionaries."""
+    """Deep merge two dictionaries, handling bool-to-dict conversion for clips settings."""
     result = base.copy()
     for key, value in override.items():
         if key in result and isinstance(result[key], dict) and isinstance(value, dict):
             result[key] = _deep_merge(result[key], value)
+        elif key in result and isinstance(result[key], dict) and isinstance(value, bool):
+            # Handle original settings.yaml format where clips.vertical/captions/outro are booleans
+            # Keep the base dict structure but update the 'enabled' key
+            result[key] = result[key].copy()
+            result[key]["enabled"] = value
         else:
             result[key] = value
     return result
