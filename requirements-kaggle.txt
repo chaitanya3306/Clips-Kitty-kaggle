@@ -21,7 +21,8 @@ nvidia-cublas-cu12>=12.4,<13
 ultralytics>=8.4.116,<9
 # opencv-python<5 matters. opencv-python 5.0 is out and pip takes it without this.
 opencv-python>=4.14.0.94,<5
-rapidocr-onnxruntime>=1.4.4,<1.5
+# rapidocr-onnxruntime: latest compatible version (1.2.3 as of 2024)
+rapidocr-onnxruntime>=1.2.3,<1.3
 onnxruntime>=1.26,<2
 
 # ---- GPU-specific: onnxruntime-gpu for CUDA acceleration --------------
@@ -52,8 +53,9 @@ piper-tts>=1.5.0,<2
 # ---- Kaggle-specific additions ----------------------------------------
 # PyTorch with CUDA 12 support (for TalkNet, YOLOv8, etc.)
 # Kaggle typically has CUDA 12.1/12.4
-torch>=2.4.0,<3 --index-url https://download.pytorch.org/whl/cu121
-torchvision>=0.19.0,<1 --index-url https://download.pytorch.org/whl/cu121
+# Note: Install torch separately with --index-url in notebook cell
+# torch>=2.4.0,<3 --index-url https://download.pytorch.org/whl/cu121
+# torchvision>=0.19.0,<1 --index-url https://download.pytorch.org/whl/cu121
 
 # Hugging Face Hub for model downloads (Whisper models)
 huggingface-hub>=0.24.0,<1
