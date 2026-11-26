@@ -6,28 +6,21 @@
 # Install with: pip install -r requirements-kaggle.txt
 
 # ---- Core dependencies (from base requirements.txt) -------------------
-# Extractors break whenever a site changes, so this is the one dependency
-# you always want newest. No ceiling.
-yt-dlp>=2026.8.19
-# YouTube's player JavaScript solver scripts for the YouTube cookies fallback
+yt-dlp==2026.8.19
 yt-dlp-ejs==0.8.0
 
 # ---- transcription and vision -----------------------------------------
 python_speech_features>=0.6,<1
-faster-whisper>=1.2.1,<2
-# CRITICAL: cuBLAS 12 for faster-whisper GPU on Linux
-# Kaggle has CUDA 12, so we need the cu12 wheel
+faster-whisper==1.1.1
 nvidia-cublas-cu12>=12.4,<13
-ultralytics>=8.4.116,<9
-# opencv-python<5 matters. opencv-python 5.0 is out and pip takes it without this.
+ultralytics==8.3.0
 opencv-python>=4.14.0.94,<5
-# rapidocr-onnxruntime: latest compatible version (1.2.3 as of 2024)
-rapidocr-onnxruntime>=1.2.3,<1.3
-onnxruntime>=1.26,<2
+rapidocr-onnxruntime==1.2.3
+onnxruntime==1.25.0
 
 # ---- GPU-specific: onnxruntime-gpu for CUDA acceleration --------------
 # Optional: install for GPU-accelerated ONNX inference (PANNs, RapidOCR, Voice)
-# onnxruntime-gpu>=1.26,<2
+# onnxruntime-gpu==1.25.0
 
 # ---- API server -------------------------------------------------------
 fastapi>=0.141.1,<1
@@ -35,7 +28,6 @@ uvicorn[standard]>=0.52.4,<1
 
 # ---- everything else --------------------------------------------------
 requests>=2.34.2,<3
-# keyring uses libsecret on Linux (needs libsecret-1-0 system package)
 keyring>=25.6,<26
 websockets>=14,<17
 cryptography>=48,<49
@@ -51,14 +43,8 @@ nvidia-ml-py>=12.575.51,<14
 piper-tts>=1.5.0,<2
 
 # ---- Kaggle-specific additions ----------------------------------------
-# PyTorch with CUDA 12 support (for TalkNet, YOLOv8, etc.)
-# Kaggle typically has CUDA 12.1/12.4
-# Note: Install torch separately with --index-url in notebook cell
-# torch>=2.4.0,<3 --index-url https://download.pytorch.org/whl/cu121
-# torchvision>=0.19.0,<1 --index-url https://download.pytorch.org/whl/cu121
-
 # Hugging Face Hub for model downloads (Whisper models)
-huggingface-hub>=0.24.0,<1
+huggingface-hub==0.34.4
 
 # tqdm for progress bars
 tqdm>=4.66.0,<5

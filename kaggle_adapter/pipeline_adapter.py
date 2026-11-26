@@ -22,6 +22,7 @@ import json
 import os
 import threading
 import time
+import traceback
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -55,6 +56,7 @@ class PipelineResult:
     video_id: str = ""
     video_title: str = ""
     error: Optional[str] = None
+    error_traceback: Optional[str] = None
     processing_time_seconds: float = 0.0
     stages_completed: list[str] = field(default_factory=list)
 
@@ -362,6 +364,7 @@ class PipelineAdapter:
 
         except Exception as e:
             error_msg = str(e)
+            error_tb = traceback.format_exc()
             self._emit_progress(PipelineProgress(
                 stage="error",
                 message=f"Pipeline failed: {error_msg}",
@@ -369,6 +372,7 @@ class PipelineAdapter:
                 error=error_msg,
             ))
             result.error = error_msg
+            result.error_traceback = error_tb
             result.processing_time_seconds = time.monotonic() - self._start_time
             result.stages_completed = list(self._completed_stages)
 
@@ -467,6 +471,7 @@ class PipelineAdapter:
 
         except Exception as e:
             error_msg = str(e)
+            error_tb = traceback.format_exc()
             self._emit_progress(PipelineProgress(
                 stage="error",
                 message=f"Pipeline failed: {error_msg}",
@@ -474,6 +479,7 @@ class PipelineAdapter:
                 error=error_msg,
             ))
             result.error = error_msg
+            result.error_traceback = error_tb
             result.processing_time_seconds = time.monotonic() - self._start_time
             result.stages_completed = list(self._completed_stages)
 
