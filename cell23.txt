@@ -1,0 +1,21 @@
+# Get processing summary
+if 'result' in locals() and result.success:
+    summary = monitor.get_summary()
+    
+    print("=" * 50)
+    print("PROCESSING SUMMARY")
+    print("=" * 50)
+    print(f"Video ID:      {summary['video_id']}")
+    print(f"Total Time:    {summary['total_time']:.1f}s")
+    print(f"Clips Created: {len(result.clips)}")
+    print("\nStage Breakdown:")
+    for stage_name, stage_info in summary['stages'].items():
+        status = "✅" if stage_info['completed'] else "⏸️"
+        dur = stage_info['duration']
+        print(f"  {status} {stage_name:12s} — {dur:.1f}s — {stage_info['message']}")
+    
+    print("\n" + "=" * 50)
+    print("To re-run with different settings:")
+    print("1. Modify CONTENT_MODE, CLIP_COUNT, MIN_DURATION, MAX_DURATION in Cell 12")
+    print("2. Re-run cells 12, 14, 15, 17, 19, 21")
+    print("3. The pipeline will skip already-processed stages (cached in /data/state.db)")
