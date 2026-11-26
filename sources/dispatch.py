@@ -146,10 +146,40 @@ def download(url: str, output_dir: Path, vertical: bool = False) -> DownloadedVi
     imported as they are, so it makes no difference to them."""
     source, video_id = identify(url)
     if source == "local":
-        # Only reachable if the imported copy in downloads/ was deleted.
-        raise ValueError(
-            "The uploaded video's imported copy is gone — upload the file again."
+        # Local file: copy from /data/downloads/<video_id>.mp4 to output_dir
+        from core.models import DownloadedVideo
+        import shutil
+
+        downloads_dir = Path("/data/downloads")
+        src_path = downloads_dir / f"{video_id}.mp4"
+
+        # Also check for other extensions
+        if not src_path.exists():
+            matches = list(downloads_dir.glob(f"{video_id}.*"))
+            if matches:
+                src_path = matches[0]
+            else:
+                raise FileNotFoundError(
+                    f"Local video not found in {downloads_dir}. "
+                    f"Place your file as {video_id}.mp4 in /data/downloads/"
+                )
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        dst_path = output_dir / src_path.name
+
+        if not dst_path.exists():
+            shutil.copy2(src_path, dst_path)
+
+        return DownloadedVideo(
+            video_id=video_id,
+            title=video_id,
+            path=dst_path,
+            duration=0.0,  # Will be detected later
+            channel="local",
+            games=[],
+            description="",
         )
+
     _clear_stale_partials(output_dir, video_id)
     try:
         if source == "twitch":
