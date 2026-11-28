@@ -16,7 +16,7 @@ python_speech_features>=0.6,<1
 # faster-whisper @ git+https://github.com/SYSTRAN/faster-whisper.git
 
 # cuBLAS 12 for faster-whisper GPU on CUDA 12 (Kaggle has CUDA 12)
-nvidia-cublas-cu12>=12.4,<13
+nvidia-cublas-cu12>=12.9.3.13,<13
 
 # Vision/ML - compatible with base requirements, allow Kaggle's newer versions
 ultralytics>=8.4.116,<9
