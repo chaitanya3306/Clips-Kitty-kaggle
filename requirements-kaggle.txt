@@ -21,7 +21,7 @@ ultralytics>=8.4.116,<9
 opencv-python>=4.14.0.94,<5
 rapidocr-onnxruntime==1.2.3
 # onnxruntime: let Kaggle's version work, only pin minimum
-onnxruntime>=1.26
+onnxruntime>=1.32.0
 
 # ---- API server ---------------------------------------------------------
 fastapi>=0.141.1,<1
