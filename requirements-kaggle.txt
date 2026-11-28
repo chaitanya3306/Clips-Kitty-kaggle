@@ -1,66 +1,59 @@
 # Kaggle Requirements for Clips Kitty
 # ====================================
-# This file extends the base requirements.txt with Kaggle-specific
-# dependencies and version pins for the container environment.
+# Optimized for Kaggle's pre-installed environment.
+# Only installs what's NOT already in Kaggle or needs specific versions.
 #
 # Install with: pip install -r requirements-kaggle.txt
 
-# ---- Core dependencies (from base requirements.txt) -------------------
+# ---- Core: yt-dlp always needs latest (site changes break extractors) ----
 yt-dlp>=2026.8.19
 yt-dlp-ejs==0.8.0
 
-# ---- transcription and vision -----------------------------------------
+# ---- Transcription & Vision (specific versions needed) -------------------
 python_speech_features>=0.6,<1
 faster-whisper>=1.2.1,<2
 
 # cuBLAS 12 for faster-whisper GPU on CUDA 12 (Kaggle has CUDA 12)
 nvidia-cublas-cu12>=12.4,<13
 
-# Vision/ML - compatible with base requirements
+# Vision/ML - compatible with base requirements, allow Kaggle's newer versions
 ultralytics>=8.4.116,<9
 opencv-python>=4.14.0.94,<5
 rapidocr-onnxruntime==1.2.3
-onnxruntime>=1.26,<2
+# onnxruntime: let Kaggle's version work, only pin minimum
+onnxruntime>=1.26
 
-# Optional: onnxruntime-gpu for CUDA-accelerated ONNX inference (PANNs, RapidOCR, Voice)
-# onnxruntime-gpu>=1.26,<2
-
-# ---- API server -------------------------------------------------------
+# ---- API server ---------------------------------------------------------
 fastapi>=0.141.1,<1
 uvicorn[standard]>=0.52.4,<1
 
-# ---- everything else --------------------------------------------------
-requests>=2.34.2,<3
-# keyring not needed on Kaggle (Linux, no system keychain)
-# keyring>=25.6,<26 ; sys_platform != "win32"
-websockets>=14,<17
-cryptography>=48,<49
-defusedxml>=0.7.1,<1
-PyYAML>=6.0.3,<7
-google-api-python-client>=2.198.0,<3
-google-auth-oauthlib>=1.4.0,<2
-curl_cffi>=0.15.0,<0.16
-psutil>=5.9.8,<6
-nvidia-ml-py>=12.575.51,<14
+# ---- Other dependencies (use Kaggle's pre-installed where possible) -----
+# requests, cryptography, psutil, websockets, PyYAML, google-api-python-client,
+# google-auth-oauthlib, curl_cffi, nvidia-ml-py are pre-installed in Kaggle
+# Only add if we need specific versions not provided
 
-# ---- AI dubbing -------------------------------------------------------
+# ---- AI dubbing ---------------------------------------------------------
 piper-tts>=1.5.0,<2
 
-# ---- Kaggle-specific additions ----------------------------------------
-# Hugging Face Hub for model downloads (Whisper models)
+# ---- Kaggle-specific additions ------------------------------------------
+# Hugging Face Hub - use version compatible with Kaggle's transformers/gradio
+# Kaggle has huggingface-hub >=1.16, we need >=0.34 for our usage
 huggingface-hub>=0.34.4,<1
 
-# tqdm for progress bars
+# tqdm for progress bars (pre-installed, but ensure version)
 tqdm>=4.66.0,<5
 
-# Python-dotenv for loading .env files (optional)
+# python-dotenv for .env files (optional)
 python-dotenv>=1.0.0,<2
 
-# Jupyter/IPython for notebook display
-ipython>=8.10.0,<9
-ipywidgets>=8.1.0,<9
+# ipython/ipywidgets - use Kaggle's versions to avoid conflicts
+# ipython>=8.10.0,<9
+# ipywidgets>=8.1.0,<9
 
-# ---- System dependencies (install via apt-get, not pip) ---------------
+# defusedxml (pre-installed)
+# defusedxml>=0.7.1,<1
+
+# ---- System dependencies (install via apt-get, not pip) -----------------
 # ffmpeg
 # libgl1 libglib2.0-0 (for OpenCV)
 # libsecret-1-0 (for keyring)
