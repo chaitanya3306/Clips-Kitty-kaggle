@@ -6,21 +6,24 @@
 # Install with: pip install -r requirements-kaggle.txt
 
 # ---- Core dependencies (from base requirements.txt) -------------------
-yt-dlp==2026.8.19
+yt-dlp>=2026.8.19
 yt-dlp-ejs==0.8.0
 
 # ---- transcription and vision -----------------------------------------
 python_speech_features>=0.6,<1
-faster-whisper==1.1.1
+faster-whisper>=1.2.1,<2
+
+# cuBLAS 12 for faster-whisper GPU on CUDA 12 (Kaggle has CUDA 12)
 nvidia-cublas-cu12>=12.4,<13
-ultralytics==8.3.0
+
+# Vision/ML - compatible with base requirements
+ultralytics>=8.4.116,<9
 opencv-python>=4.14.0.94,<5
 rapidocr-onnxruntime==1.2.3
-onnxruntime==1.25.0
+onnxruntime>=1.26,<2
 
-# ---- GPU-specific: onnxruntime-gpu for CUDA acceleration --------------
-# Optional: install for GPU-accelerated ONNX inference (PANNs, RapidOCR, Voice)
-# onnxruntime-gpu==1.25.0
+# Optional: onnxruntime-gpu for CUDA-accelerated ONNX inference (PANNs, RapidOCR, Voice)
+# onnxruntime-gpu>=1.26,<2
 
 # ---- API server -------------------------------------------------------
 fastapi>=0.141.1,<1
@@ -28,7 +31,8 @@ uvicorn[standard]>=0.52.4,<1
 
 # ---- everything else --------------------------------------------------
 requests>=2.34.2,<3
-keyring>=25.6,<26
+# keyring not needed on Kaggle (Linux, no system keychain)
+# keyring>=25.6,<26 ; sys_platform != "win32"
 websockets>=14,<17
 cryptography>=48,<49
 defusedxml>=0.7.1,<1
@@ -44,13 +48,17 @@ piper-tts>=1.5.0,<2
 
 # ---- Kaggle-specific additions ----------------------------------------
 # Hugging Face Hub for model downloads (Whisper models)
-huggingface-hub==0.34.4
+huggingface-hub>=0.34.4,<1
 
 # tqdm for progress bars
 tqdm>=4.66.0,<5
 
 # Python-dotenv for loading .env files (optional)
 python-dotenv>=1.0.0,<2
+
+# Jupyter/IPython for notebook display
+ipython>=8.10.0,<9
+ipywidgets>=8.1.0,<9
 
 # ---- System dependencies (install via apt-get, not pip) ---------------
 # ffmpeg

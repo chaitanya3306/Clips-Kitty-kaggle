@@ -49,6 +49,8 @@ DEFAULT_KAGGLE_SETTINGS = {
         "batch_size": "auto",
     },
     "clips": {
+        "min_duration": 15,
+        "max_duration": 60,
         "vertical": {
             "enabled": True,
             "crop_mode": "track",
@@ -90,11 +92,15 @@ DEFAULT_KAGGLE_SETTINGS = {
         "device": "auto",
     },
     "llm": {
-        "backend": "openrouter",
-        "model": "anthropic/claude-3.5-sonnet",
+        "backend": "openrouter/anthropic/claude-3.5-sonnet",
     },
     "youtube": {
         "cookies": "/data/youtube_cookies.txt",
+    },
+    "analysis": {
+        "chunk_seconds": 300,
+        "chunk_overlap_seconds": 60,
+        "long_video_threshold_seconds": 1800,
     },
 }
 
@@ -413,6 +419,8 @@ def quick_setup(
     use_cloud_llm: bool = True,
     force_cpu: bool = False,
     verbose: bool = True,
+    llm_backend: str = "openrouter",
+    llm_model: str = "anthropic/claude-3.5-sonnet",
 ) -> KaggleConfig:
     """
     Quick setup for Kaggle notebooks.
@@ -422,6 +430,8 @@ def quick_setup(
         use_cloud_llm: Use cloud LLM (requires API key in Kaggle Secrets)
         force_cpu: Force CPU mode even if GPU available
         verbose: Print summary
+        llm_backend: LLM provider (openrouter, openai, anthropic, ollama)
+        llm_model: LLM model name
 
     Returns:
         Ready-to-use KaggleConfig
@@ -434,6 +444,12 @@ def quick_setup(
         extra_overrides["transcription"] = {"device": "cpu", "compute_type": "int8"}
         extra_overrides["tracking"] = {"device": "cpu"}
         extra_overrides["video"] = {"encoder": "libx264"}
+
+    # Set LLM config with full spec in backend key (required by create_backend)
+    if use_cloud_llm:
+        extra_overrides["llm"] = {"backend": f"{llm_backend}/{llm_model}", "data_dir": data_dir}
+    else:
+        extra_overrides["llm"] = {"backend": f"ollama/{llm_model}", "data_dir": data_dir}
 
     return setup_kaggle_environment(
         extra_overrides=extra_overrides,

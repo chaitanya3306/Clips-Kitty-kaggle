@@ -321,7 +321,7 @@ def _check_cublas12() -> bool:
         except Exception:
             pass
     else:
-        # Windows check
+        # Windows check - try direct load first (if on PATH)
         try:
             import ctypes
             ctypes.WinDLL("cublas64_12.dll")
@@ -330,7 +330,23 @@ def _check_cublas12() -> bool:
         except Exception:
             pass
 
-    # Also check nvidia-cublas-cu12 package
+        # Windows check - try loading from nvidia.cublas package path
+        try:
+            import nvidia.cublas
+            import os
+            for path_entry in nvidia.cublas.__path__:
+                bin_dir = os.path.join(path_entry, "bin")
+                cublas_dll = os.path.join(bin_dir, "cublas64_12.dll")
+                cublaslt_dll = os.path.join(bin_dir, "cublasLt64_12.dll")
+                if os.path.exists(cublas_dll) and os.path.exists(cublaslt_dll):
+                    import ctypes
+                    ctypes.WinDLL(cublas_dll)
+                    ctypes.WinDLL(cublaslt_dll)
+                    return True
+        except Exception:
+            pass
+
+    # Also check nvidia-cublas-cu12 package exists
     try:
         import nvidia.cublas
         return True
