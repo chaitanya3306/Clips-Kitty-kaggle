@@ -427,10 +427,11 @@ class PipelineAdapter:
             # Generate a video_id from filename
             video_id = f"local_{source_path.stem}"
 
-            # Copy to downloads directory (original pipeline expects it there)
+            # Copy to downloads directory with the video_id as filename
+            # (original pipeline's dispatch.download expects /data/downloads/<video_id>.mp4)
             downloads_dir = self.data_dir / "downloads"
             downloads_dir.mkdir(parents=True, exist_ok=True)
-            target_path = downloads_dir / source_path.name
+            target_path = downloads_dir / f"{video_id}{source_path.suffix}"
 
             import shutil
             if not target_path.exists():
