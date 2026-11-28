@@ -11,7 +11,9 @@ yt-dlp-ejs==0.8.0
 
 # ---- Transcription & Vision (specific versions needed) -------------------
 python_speech_features>=0.6,<1
-faster-whisper>=1.2.1,<2
+# faster-whisper from GitHub: fixes PyAV metadata_errors compatibility
+# (PyPI 1.2.1 has bug with newer PyAV - https://github.com/SYSTRAN/faster-whisper/issues/652)
+faster-whisper @ git+https://github.com/SYSTRAN/faster-whisper.git
 
 # cuBLAS 12 for faster-whisper GPU on CUDA 12 (Kaggle has CUDA 12)
 nvidia-cublas-cu12>=12.4,<13
