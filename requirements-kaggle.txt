@@ -36,9 +36,9 @@ uvicorn[standard]>=0.52.4,<1
 piper-tts>=1.5.0,<2
 
 # ---- Kaggle-specific additions ------------------------------------------
-# Hugging Face Hub - use version compatible with Kaggle's transformers/gradio
-# Kaggle has huggingface-hub >=1.16, we need >=0.34 for our usage
-huggingface-hub>=0.34.4,<1
+# Hugging Face Hub - compatible with Kaggle's pre-installed transformers/gradio/diffusers
+# Kaggle has huggingface-hub >=1.16 (transformers 5.20.2 needs >=1.31)
+huggingface-hub>=1.31.0,<3
 
 # tqdm for progress bars (pre-installed, but ensure version)
 tqdm>=4.66.0,<5
